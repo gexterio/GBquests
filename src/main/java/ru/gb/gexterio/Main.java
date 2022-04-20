@@ -1,18 +1,20 @@
 package ru.gb.gexterio;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.Arrays;
 
 public class Main {
 
     public static void main(String[] args) {
-         System.out.println("Конечный массив: " + Arrays.toString(arrayFix(randomArray(20, 1))));
-         System.out.println("Массив от 1 до 100: " + Arrays.toString(hundredArray()));
-         System.out.println("Умножение чисел меньше 6: " + Arrays.toString(multiplication()));
-         printCross();
-         System.out.println(Arrays.toString(arrayConstructor(10, 9)));
-         maxAndMinValue();
-         System.out.println(checkBalance(randomArray(20, 8)));  //передается максимальная длина массива и максимальное значение элемента
-
+        //   System.out.println("Конечный массив: " + Arrays.toString(arrayFix(randomArray(20, 1))));
+        //   System.out.println("Массив от 1 до 100: " + Arrays.toString(hundredArray()));
+        //   System.out.println("Умножение чисел меньше 6: " + Arrays.toString(multiplication()));
+        //   printCross();
+        //   System.out.println(Arrays.toString(arrayConstructor(10, 9)));
+        //  maxAndMinValue();
+        //  System.out.println(checkBalance(randomArray(20, 8)));  //передается максимальная длина массива и максимальное значение элемента
+        cyclicalArrayShift(randomArray(20, 50), -7);
 
     }
 
@@ -122,5 +124,33 @@ public class Main {
             }
         }
         return result;
+    }
+
+    public static void cyclicalArrayShift(int[] array, int n) { //Задание №7
+        System.out.println("-----------------");                //Алгоритм из головы. убил день, но рад победе :D
+        int buffer = 0;                                         //Его можно м нужно оптимизировать (объеденить повторяющиеся циклы в один),
+        if (n > 0) {                                            //но так как этот код далее не нужен, решил остановиться на этом.
+            for (int count = 1; count <= n; count++) {
+                for (int i = array.length - 1; i > 0; i--) {
+                    buffer = array[i - 1];
+                    array[i - 1] = array[i];
+                    array[i] = buffer;
+                }
+            }
+            System.out.println("Сдвинутый массив на " + n + " вправо: " + Arrays.toString(array));
+        } else if (n < 0) {
+            n = n * -1;
+            for (int count = 1; count <= n; count++) {
+                for (int i = 0; i + 1 < array.length; i++) {
+                    buffer = array[i + 1];
+                    array[i + 1] = array[i];
+                    array[i] = buffer;
+                }
+            }
+            System.out.println("Сдвинутый массив на " + n + " влево: " + Arrays.toString(array));
+        } else {
+            System.out.println("Массив без изменений");
+        }
+
     }
 }
