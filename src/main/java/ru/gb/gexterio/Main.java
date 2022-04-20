@@ -126,7 +126,7 @@ public class Main {
         return result;
     }
 
-    public static void cyclicalArrayShift(int[] array, int n) { //Задание №7
+    public static void cyclicalArrayShift(int[] array, int n) { //Задание №8
         System.out.println("-----------------");                //Алгоритм из головы. убил день, но рад победе :D
         int buffer = 0;                                         //Его можно м нужно оптимизировать (объеденить повторяющиеся циклы в один),
         if (n > 0) {                                            //но так как этот код далее не нужен, решил остановиться на этом.
