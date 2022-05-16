@@ -4,7 +4,6 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-        Random random = new Random();
         Cat[] cats = {
                 new Cat("Барсик", 12),
                 new Cat("Фунтик", 10),
@@ -13,8 +12,13 @@ public class Main {
                 new Cat("Пушок", 8)
 
         };
-        Plate plate = new Plate(0);
+        Plate plate = new Plate(20);
+        feedingCats(cats, plate);
+    }
 
+
+    public static void feedingCats(Cat[] cats, Plate plate) {
+        Random random = new Random();
         for (Cat cat : cats) {
             do {
                 if (plate.getFood() >= cat.getAppetite()) {
@@ -35,4 +39,5 @@ public class Main {
         }
     }
 }
+
 
