@@ -2,17 +2,12 @@ package ru.gb.gexterio.HomeWork_1;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class MainWindow extends JFrame {
     private Double leftOperand;
     private String operation;
-    private ArrayList<JButton> numberList = new ArrayList<>();
-    private ArrayList<JButton> functionList = new ArrayList<>();
-    private ArrayList<JButton> operationList = new ArrayList<>();
-    private ArrayList<JButton> numAndFuncList = new ArrayList<>();
 
 
     public MainWindow() {
@@ -24,7 +19,7 @@ public class MainWindow extends JFrame {
         final JPanel inputPanel = new JPanel();        //панель ввода
         final JPanel mathPanel = new JPanel();         //панель операнд
         final GridLayout numberLayout = new GridLayout(6, 3, 0, 0); //слой с числами
-        final GridLayout inputLayout = new GridLayout(2,1, 0,0);    //слой со строкой ввода
+        final GridLayout inputLayout = new GridLayout(2, 1, 0, 0);    //слой со строкой ввода
         final GridLayout mathLayout = new GridLayout(6, 1, 0, 0);   //слой со знаками действия
 
         numberPanel.setLayout(numberLayout);
@@ -32,6 +27,7 @@ public class MainWindow extends JFrame {
         mathPanel.setLayout(mathLayout);
         JLabel input = new JLabel("0");
         JLabel historyLabel = new JLabel("");
+        //ввод чисел
         ActionListener numberListener = e -> {
             final JButton button = (JButton) e.getSource();
             final String text = button.getText();
@@ -39,73 +35,84 @@ public class MainWindow extends JFrame {
             if (".".equals(text) && input.getText().contains(".")) {
                 return;
             }
+
             if ("0".equals(inputText) && !".".equals(text)) {
                 inputText = "";
             }
+
             inputText += text;
             input.setText((inputText));
         };
 
 
-        ActionListener buttonListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JButton source = (JButton) e.getSource();
-                String action = source.getText();
-                Double rightOperand = Double.parseDouble(input.getText());
-                historyLabel.setText("");
-                if ("=".equals(action)) {
-                    if (leftOperand != null) {
-                        switch (operation) {
-                            case "+":
-                                input.setText(String.valueOf(leftOperand + rightOperand));
-                                break;
-                            case "-":
-                                input.setText(String.valueOf(leftOperand - rightOperand));
-                                break;
-                            case "*":
-                                input.setText(String.valueOf(leftOperand * rightOperand));
-                                break;
-                            case "/":
-                                input.setText(String.valueOf(leftOperand / rightOperand));
-                                break;
-                            case "+/-":
-                                input.setText(String.valueOf(leftOperand * (-1)));
-                                break;
-                            case "x^2":
-                                input.setText(String.valueOf(leftOperand * leftOperand));
-                                break;
-                            case "x^y":
-                                input.setText(String.valueOf(Math.pow(leftOperand, leftOperand)));
-                                break;
-                            case "CE":
-                                leftOperand = null;
-                                historyLabel.setText("");
-                                input.setText("");
-                                break;
+        ActionListener buttonListener = e -> {
+            JButton source = (JButton) e.getSource();
+            String action = source.getText();
+            Double rightOperand = Double.parseDouble(input.getText());
+            historyLabel.setText("");
+
+            if ("=".equals(action)) {
+                if (leftOperand != null) {
+                    switch (operation) {
+                        case "+":
+                            input.setText(String.valueOf(leftOperand + rightOperand));
+                            break;
+                        case "-":
+                            input.setText(String.valueOf(leftOperand - rightOperand));
+                            break;
+                        case "*":
+                            input.setText(String.valueOf(leftOperand * rightOperand));
+                            break;
+                        case "/":
+                            input.setText(String.valueOf(leftOperand / rightOperand));
+                            break;
+                        case "+/-":
+                            input.setText(String.valueOf(leftOperand * (-1)));
+                            break;
+                        case "x^2":
+                            input.setText(String.valueOf(leftOperand * leftOperand));
+                            break;
+                        case "x^y":
+                            input.setText(String.valueOf(Math.pow(leftOperand, rightOperand)));
+                            break;
+                        case "CE":
+                            leftOperand = null;
+                            historyLabel.setText("");
+                            input.setText("");
+                            break;
+                        case "2√":
+                            input.setText(String.valueOf(Math.sqrt(leftOperand)));
+                            break;
+//                            case "%":
+//                                input.setText(String.valueOf());
+//                                break;
+//                            case "C":
+//                                input.setText("");
+//                                break;
 //                            case "<—":
 //
 //                                break;
 
-                        }
-                        leftOperand = Double.parseDouble(input.getText());
-                        operation = null;
                     }
-                    return;
+                    leftOperand = Double.parseDouble(input.getText());
+                    operation = null;
                 }
-                leftOperand = Double.parseDouble(input.getText());
-                operation = action;
-                if (!operation.equals("CE")) {
-                    String leftOpAndAction =leftOperand.toString() + action;
-                    historyLabel.setText(leftOpAndAction);
-                }
-                input.setText("0");
+                return;
             }
 
+            leftOperand = Double.parseDouble(input.getText());
+            operation = action;
+            //строка с последним нзачением
+            if (!operation.equals("CE")) {
+                String leftOpAndAction = leftOperand + "    " + action;
+                historyLabel.setText(leftOpAndAction);
+            }
+            input.setText("0");
         };
 
         //Создание кнопок
         JButton expSqNum = new JButton("x^2");
+        ArrayList<JButton> functionList = new ArrayList<>();
         functionList.add(expSqNum);
         JButton expNum = new JButton("x^y");
         functionList.add(expNum);
@@ -118,6 +125,7 @@ public class MainWindow extends JFrame {
         JButton backspaceBtn = new JButton("<—");
         functionList.add(backspaceBtn);
         JButton[] numBtn = new JButton[9]; //создание кнопок 1-9
+        ArrayList<JButton> numberList = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
             numBtn[i] = new JButton("" + (1 + i));
             numberList.add(numBtn[i]);
@@ -132,6 +140,7 @@ public class MainWindow extends JFrame {
         JButton[] mathBtn = new JButton[6];  //создание правой панели
         String chars = "C/*-+=";
         char[] signs = chars.toCharArray();
+        ArrayList<JButton> operationList = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             mathBtn[i] = new JButton("" + signs[i]);
             operationList.add(mathBtn[i]);
@@ -142,18 +151,13 @@ public class MainWindow extends JFrame {
         allBtnList.addAll(numberList);
         allBtnList.addAll(functionList);
         allBtnList.addAll(operationList);
-        for (JButton btn : allBtnList) {
 
-        }
-        numAndFuncList.addAll(functionList);
-        numAndFuncList.addAll(numberList);
-        for (JButton btn: functionList) {
+        for (JButton btn : functionList) {
             numberPanel.add(btn);
             btn.addActionListener(buttonListener);
         }
-        for (JButton btn: numberList) {
+        for (JButton btn : numberList) {
             numberPanel.add(btn);
-          //  btn.addActionListener(historyListener);
             if (btn.equals(negative)) {
                 btn.addActionListener(buttonListener);
             } else {
@@ -162,11 +166,7 @@ public class MainWindow extends JFrame {
         }
         for (JButton btn : operationList) {
             mathPanel.add(btn);
-          //  btn.addActionListener(historyListener);
             btn.addActionListener(buttonListener);
-        }
-        for (JButton btn : numAndFuncList) {
-
         }
         inputPanel.add(historyLabel);
         inputPanel.add(input);
@@ -174,16 +174,35 @@ public class MainWindow extends JFrame {
         add(inputPanel, BorderLayout.NORTH);
         add(mathPanel, BorderLayout.EAST);
         //Форматирование
-        Font roboto18 = new Font("Roboto", Font.BOLD, 20);
+        Font roboto20 = new Font("Roboto", Font.BOLD, 20);
         Font roboto14 = new Font("Roboto", Font.BOLD, 14);
+
+        for (JButton btn : allBtnList) {
+            btn.setFont(roboto14);
+        }
+        for (JButton btn : functionList) {
+            btn.setBackground(Color.LIGHT_GRAY);
+        }
+        for (JButton btn : numberList) {
+            btn.setBackground(Color.WHITE);
+        }
+        for (JButton btn : operationList) {
+            if ("=".equals(btn.getText())) {
+                btn.setBackground(Color.GREEN);
+            } else {
+                btn.setBackground(Color.LIGHT_GRAY);
+            }
+        }
+
         historyLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         input.setHorizontalAlignment(SwingConstants.RIGHT);
-        input.setFont(roboto18);
+        input.setFont(roboto20);
         //проверка
         System.out.println(numberList.size());
         System.out.println(functionList.size());
         System.out.println(operationList.size());
         System.out.println(allBtnList.size());
+        System.out.println(Math.pow(5, 2));
 
         setVisible(true);
     }
