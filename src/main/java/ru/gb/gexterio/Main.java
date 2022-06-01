@@ -17,46 +17,56 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println(intArraySummator(StringArrayConstructor()));
+        try {
+            System.out.println(intArraySummator(StringArrayConstructor()));
+        } catch (MyArrayDataException  | MyArraySizeException e) {
+            System.out.println("Произошла ошибка");
+        }
 
     }
 
 
-    private static int intArraySummator(String[][] array) throws MyArrayDataException {
+    private static int intArraySummator(String[][] array) throws MyArrayDataException, MyArraySizeException {
+
+        int sum = 0;
         try {
-            int sum = 0;
             for (int i = 0; i < array.length; i++) {
                 for (int j = 0; j < array[i].length; j++) {
+
                     sum += Integer.parseInt(array[i][j], 10);
+
                 }
             }
-            //  System.out.println();
-            return sum;
         } catch (MyArrayDataException e) {
             throw e;
         }
+        return sum;
+
     }
 
     private static String[][] StringArrayConstructor() throws MyArraySizeException {
         Scanner scanner = new Scanner(System.in);
-        try {
-            System.out.println("Задайте размер двумерного массива");
-            String[][] array = new String[scanner.nextInt()][scanner.nextInt()];
-            System.out.println("Задайте минимальное и максимальное число для заполнения массива диапозоном чисел");
-            int min = scanner.nextInt();
-            int max = scanner.nextInt();
-            //   System.out.println("Массив строк:");
-            for (int i = 0; i < array.length; i++) {
-                //    System.out.println();
-                for (int j = 0; j < array[i].length; j++) {
-                    array[i][j] = Integer.toString((int) (Math.random() * (max - min) + min));
-                    // System.out.print(array[i][j] + " ");
-                }
-            }
-            return array;
-        } catch (MyArraySizeException e) {
-            throw e;
+
+        System.out.println("Задайте размер двумерного массива");
+        int size = scanner.nextInt();
+        String[][] array = new String[size][size];
+        if (array.length != 4) {
+            throw new MyArraySizeException(size);
         }
+        System.out.println("Задайте минимальное и максимальное число для заполнения массива диапозоном чисел");
+        int min = scanner.nextInt();
+        int max = scanner.nextInt();
+        //   System.out.println("Массив строк:");
+        for (int i = 0; i < array.length; i++) {
+            //    System.out.println();
+            for (int j = 0; j < array[i].length; j++) {
+                array[i][j] = Integer.toString((int) (Math.random() * (max - min) + min));
+                // System.out.print(array[i][j] + " ");
+            }
+        }
+        array [3][3] = "local";
+        return array;
+
     }
 }
 
