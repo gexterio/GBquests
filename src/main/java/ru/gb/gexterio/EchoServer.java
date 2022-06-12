@@ -8,19 +8,20 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static java.lang.System.out;
+
 public class EchoServer {
 
     public static void main(String[] args) {
         Socket socket;
         try (ServerSocket serverSocket = new ServerSocket(8888)) {
-            System.out.println("Сервер запущен, ожидаем подключения...");
+            out.println("Сервер запущен, ожидаем подключения...");
             socket = serverSocket.accept();
-            System.out.println("Клиент подключился");
+            out.println("Клиент подключился");
             DataInputStream in = new DataInputStream(socket.getInputStream());
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-
-
             AtomicBoolean isEnd = new AtomicBoolean(false);
+
             Thread readerAndEcho = new Thread(() -> {
                 while (true) {
                     String message = null;
@@ -44,8 +45,8 @@ public class EchoServer {
             });
 
             Thread sender = new Thread(() -> {
+                Scanner scanner = new Scanner(System.in);
                 while (true) {
-                    Scanner scanner = new Scanner(System.in);
                     String msg = scanner.nextLine();
                     try {
                         out.writeUTF(msg);
@@ -54,53 +55,14 @@ public class EchoServer {
                     }
                 }
             });
-
-//            Thread checker =  new Thread(() -> {
-//                try {
-//                    String msg = in.readUTF();
-//                    if ("/end".equalsIgnoreCase(msg)) {
-//
-//
-//
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            });
-
-
+            sender.setDaemon(!isEnd.get());  //Очень чудно получилось, но ведь работает )))
             readerAndEcho.start();
             sender.start();
-//            checker.start();
+
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-        }
-//        private  void closer () {
-//            if (in != null) {
-//                try {
-//                    in.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            if (out != null) {
-//                try {
-//                    out.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            if (socket != null) {
-//                try {
-//                    socket.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
     }
+}
 
