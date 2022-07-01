@@ -1,5 +1,9 @@
 package ru.gb.gexterio;
 
+import java.security.KeyRep;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * 1. Написать метод, который меняет два элемента массива местами (массив может быть любого
  * ссылочного типа);
@@ -24,7 +28,15 @@ package ru.gb.gexterio;
 
 public class Main {
     public static void main(String[] args) {
-        Box<Apple> boxWithApple = new Box<>();
+        Box<Apple> appleBox = new Box<>();
+        appleBox.addFruit(new Apple());
+        appleBox.addManyFruit(new Apple(), 10);
+        appleBox.stat();
+
+
 
     }
+
+
+
 }
